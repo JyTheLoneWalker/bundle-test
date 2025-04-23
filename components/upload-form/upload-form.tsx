@@ -12,16 +12,41 @@ import {
   CardFooter,
 } from '../ui/card';
 import { Input } from '../ui/input';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueries } from '@tanstack/react-query';
 import { uploadQueryKeys } from '@/lib/data-access/upload/uploadQueryKeys';
-import { postUpload } from '@/lib/data-access/upload/uploadApi';
+import {
+  getUploadStatus,
+  postUpload,
+} from '@/lib/data-access/upload/uploadApi';
+import { onSuccessMutateUpload } from '@/lib/data-access/upload/uploadResponseHandler';
+import { Progress } from '../ui/progress';
 
 const UploadForm = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [pendingTaskList, setPendingTaskList] = useState<number[]>([]);
   const { mutate, isPending } = useMutation({
     mutationKey: uploadQueryKeys.upload,
     mutationFn: postUpload,
+    onSuccess: async (data) => {
+      if ('task_id' in data && typeof data.task_id === 'number') {
+        setPendingTaskList([...pendingTaskList, data.task_id]);
+        onSuccessMutateUpload(data.task_id);
+      }
+    },
+  });
+  const pendingTaskPollResults = useQueries({
+    queries: pendingTaskList.map((taskId) => ({
+      queryKey: uploadQueryKeys.uploadStatus(taskId),
+      queryFn: () => getUploadStatus(taskId),
+      refetchInterval: 3000,
+      retry: 3,
+      combine: (results: { data: { task_id: string; progress: number } }[]) => {
+        return {
+          data: results.map((result) => result.data),
+        };
+      },
+    })),
   });
 
   const triggerFileInput = () => {
@@ -91,6 +116,20 @@ const UploadForm = () => {
           </Button>
         </CardFooter>
       </Card>
+
+      {!!pendingTaskList.length &&
+        pendingTaskPollResults.map((task) => (
+          <>
+            <Card key={task.data?.task_id}>
+              <CardHeader>
+                <CardTitle>Uploading {task.data?.name}</CardTitle>
+                <CardDescription>
+                  <Progress value={task.data?.progress} />{' '}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </>
+        ))}
     </>
   );
 };
