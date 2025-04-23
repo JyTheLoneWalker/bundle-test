@@ -18,7 +18,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   I tried to implement best practice at the start of the test, however as time passes and I do not have enough time to complete the test, I hardcoded the typing and also put everything in the same component, instead of splitting it into small and reusable component
 
 - What would you improve or add with more time?  
-  I will do proper typing along with Zod + React Hook Form schema validation, as well as splitting and organize the component to smaller for it to be reusable and avoid rerendering
+  First, I have to complete all the requirements listed (There are several that I do not have enough time to complete it), then I will do proper typing along with Zod + React Hook Form schema validation, as well as splitting and organize the component to smaller for it to be reusable and avoid rerendering
 
 - What was the trickiest part and how did you debug it?  
   The trickiest part is when the polling results does not displayed, and I have to add console.log in multiple place to see where it goes wrong
