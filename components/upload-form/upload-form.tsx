@@ -1,6 +1,6 @@
 'use client';
 
-import { UploadCloud } from 'lucide-react';
+import { Loader2, UploadCloud } from 'lucide-react';
 import { useRef, useState, type ChangeEventHandler } from 'react';
 import { Button } from '../ui/button';
 import {
@@ -12,10 +12,17 @@ import {
   CardFooter,
 } from '../ui/card';
 import { Input } from '../ui/input';
+import { useMutation } from '@tanstack/react-query';
+import { uploadQueryKeys } from '@/lib/data-access/upload/uploadQueryKeys';
+import { postUpload } from '@/lib/data-access/upload/uploadApi';
 
 const UploadForm = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { mutate, isPending } = useMutation({
+    mutationKey: uploadQueryKeys.upload,
+    mutationFn: postUpload,
+  });
 
   const triggerFileInput = () => {
     fileInputRef.current?.click();
@@ -26,6 +33,12 @@ const UploadForm = () => {
 
     if (file) {
       setSelectedFile(file);
+    }
+  };
+
+  const onSubmit = () => {
+    if (selectedFile) {
+      mutate(selectedFile);
     }
   };
 
@@ -62,7 +75,20 @@ const UploadForm = () => {
         </CardContent>
 
         <CardFooter>
-          <Button className="w-full sm:w-auto">Upload</Button>
+          <Button
+            className="w-full sm:w-auto"
+            disabled={!selectedFile || isPending}
+            onClick={onSubmit}
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              'Upload'
+            )}
+          </Button>
         </CardFooter>
       </Card>
     </>
