@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
 bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Reflection Questions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- What did you choose to mock the API and why?  
+  I used Next.js api to return dummy data. My initial thought of using that is because of the flexibility to extend more functionality if there is time remaining
 
-## Learn More
+- If you used an AI tool, what parts did it help with?  
+  I used github copilot autocomplete in VSCode to speed up the typing and using the code suggestion when it is accurate. I also used Claude to generate initial code for the UI component presentation
 
-To learn more about Next.js, take a look at the following resources:
+- What tradeoffs or shortcuts did you take?  
+  I tried to implement best practice at the start of the test, however as time passes and I do not have enough time to complete the test, I hardcoded the typing and also put everything in the same component, instead of splitting it into small and reusable component
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- What would you improve or add with more time?  
+  I will do proper typing along with Zod + React Hook Form schema validation, as well as splitting and organize the component to smaller for it to be reusable and avoid rerendering
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- What was the trickiest part and how did you debug it?  
+  The trickiest part is when the polling results does not displayed, and I have to add console.log in multiple place to see where it goes wrong
